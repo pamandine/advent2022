@@ -26,9 +26,9 @@ print(sorted_keys)
 size = len(sorted_keys)-1
 sum = 0
 for i in range(size,size-3,-1):
-    print(sorted_keys[i])
-    print(sorted[sorted_keys[i]])
     sum = sum + sorted[sorted_keys[i]]
 
-print (f'Sum of 3 bigger = {sum}')
+biggerOfAll = sorted[sorted_keys[size]]
+print (f'[PART1] Sum of 1 bigger = {biggerOfAll}')
+print (f'[PART2] Sum of 3 bigger = {sum}')
 f.close()
