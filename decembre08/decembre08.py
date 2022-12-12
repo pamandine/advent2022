@@ -8,6 +8,7 @@ TOTAL = 0
 H = 0
 IN = 0
 table = []
+SCENIC = 0
 
 for line in f.readlines():
     H = H + 1
@@ -25,29 +26,36 @@ for i in range(1,len(table)-1): # Parse lines
         # look for visibility on same line
         cur = int(h[j])
         VISIBLE = 4
+        SCORE = [0,0,0,0]
 
-        for k in range(0,j): # left part
-            if (int(h[k])>= cur):
+        for k in range(j-1,-1,-1): # left part
+            SCORE[0] += 1
+            if (int(h[k]) >= cur):
                 VISIBLE = VISIBLE - 1
                 break
 
         for k in range(j+1,len(h)): # right part
+            SCORE[1] += 1
             if (int(h[k])>= cur):
                 VISIBLE = VISIBLE - 1
                 break
 
-        for k in range(0,i):
+        for k in range(i-1,-1,-1): # top part
+            SCORE[2] += 1
             if (int(table[k][j]) >= cur):
                 VISIBLE = VISIBLE - 1
                 break
 
-        for k in range(i+1,len(table)):
+        for k in range(i+1,len(table)): # bottom
+            SCORE[3] += 1
             if (int(table[k][j]) >= cur):
                 VISIBLE = VISIBLE - 1
                 break
         
         if (VISIBLE != 0):
             IN = IN + 1
+
+        SCENIC = max(SCENIC, SCORE[0]*SCORE[1]*SCORE[2]*SCORE[3])
 
 f.close()
 
@@ -56,6 +64,9 @@ f.close()
 # Les arbres dedans (IN)
 TOTAL = TOTAL + 2*H + (L-2)*2 + IN
 print("########## Function 1 ##########")
-print(f'TOTAL={TOTAL}')
+print(f'TOTAL VISIBLE TREES={TOTAL}')
+
+print("########## Function 2 ##########")
+print (f'MAX SCENIC={SCENIC}')
 
 
