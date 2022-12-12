@@ -1,3 +1,6 @@
+import os
+path = os.path.dirname(os.path.abspath(__file__))
+file = path+"/../inputs/in03.txt"
 
 def ASCIItoInt (letter):
     # Minuscule letters are from 1 to 26
@@ -52,7 +55,7 @@ def func2(lines):
     print(sum)
 
 #main
-f = open("decembre03.txt", "r")
+f = open(file, "r")
 lines = f.readlines()
 print('Call function 1')
 func1(lines)

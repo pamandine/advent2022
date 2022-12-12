@@ -1,14 +1,13 @@
-debug=False
+import os
+path = os.path.dirname(os.path.abspath(__file__))
+file1 = path+"/../inputs/in05.txt"
+file2 = path+"/../inputs/in05.1.txt"
 
 # Build table
-if (debug):
-    f = open("decembre05ExampleTable.txt", "r")
-else:
-    f = open("decembre05Table.txt", "r")
+f = open(file1, "r")
 tab = {}
 for line in f.readlines():
     line = line.rstrip("\n")
-    print(f'Line={line}')
     if (line != ""):
         j = 1 # First column 
         for i in range(0,len(line),4): # For each column 
@@ -19,43 +18,49 @@ for line in f.readlines():
             if (c != ""): # If not empty (no key)
                 tab[j].insert(0,c) # Insert it at beginning of table/column
             j = j+1 # Next column
-    
 f.close()
 
-if debug:
-    f = open("decembre05ExampleMoves.txt", "r")
-else:
-    f = open("decembre05Moves.txt", "r")
+# Copy each list of the dictionary 
+tab2 = {}
+for j in tab.keys():
+    tab2[j] = tab[j].copy()
+
+f = open(file2, "r")
 for line in f.readlines():
     line = line.rstrip("\n")
     e = line.split()
     nbr = int(e[1])
     start = int(e[3])
     end = int(e[5])
-    print(f'Nbr={nbr}, start={start}, end={end}')
-    if (nbr == 1):  
+    # Part1
+    for i in range(nbr):
         m = tab[start].pop() # Remove last item of start list on the top
         tab[end].append(m) # Add it on the top of the new one
+    # Part2
+    if (nbr == 1):  
+        m = tab2[start].pop() # Remove last item of start list on the top
+        tab2[end].append(m) # Add it on the top of the new one
     else:
-        slot = len(tab[start])-nbr
+        slot = len(tab2[start])-nbr
         for i in range(nbr): # take several items
-            m = tab[start].pop(slot) # Remove items in order on the top of the column
+            m = tab2[start].pop(slot) # Remove items in order on the top of the column
             # Always take slot not i as index, because the size of the list will change each time we pop an element
-            tab[end].append(m) # Add it on the top of the new one
-
-
-for k in tab.keys():
-    print(f'{k} = {tab[k]}')
-
-print("End of each column :")
-txt = ""
-result = ""
-for k in tab.keys():
-    m = tab[k].pop()
-    txt += m
-    result += m.replace("[", "").replace("]", "")
-print(txt)
-print(result)
-
+            tab2[end].append(m) # Add it on the top of the new one
 f.close()
 
+def getEnds(tab):
+    print("End of each column :")
+    txt = ""
+    result = ""
+    for k in tab.keys():
+        m = tab[k].pop()
+        txt += m
+        result += m.replace("[", "").replace("]", "")
+    print(txt)
+    print(result)
+
+print("########## Table 1 ##########")
+getEnds(tab)
+
+print("########## Table 2 ##########")
+getEnds(tab2)

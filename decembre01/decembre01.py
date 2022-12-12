@@ -1,8 +1,12 @@
+import os
+path = os.path.dirname(os.path.abspath(__file__))
+file = path+"/../inputs/in01.txt"
+
 resume = {}
 sum = 0
 current = 0
 
-f = open("decembre01.txt", "r")
+f = open(file, "r")
 for line in f.readlines():
     line = line.rstrip("\n")
     if (line == ""): # New one

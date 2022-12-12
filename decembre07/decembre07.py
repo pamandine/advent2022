@@ -1,6 +1,8 @@
 import sys
+import os
+path = os.path.dirname(os.path.abspath(__file__))
+filePath = path+"/../inputs/in07.txt"
 
-debug=False
 current_folder = None
 mother_directory = None
 filesystem = 70000000
@@ -47,11 +49,7 @@ def getLine(f):
         line = None
     return line
 
-if debug:
-    f = open("decembre07Example.txt", "r")
-else:
-    f = open("decembre07.txt", "r")
-
+f = open(filePath, "r")
 line = getLine(f)
 while line is not None:
     e = line.split()
@@ -115,14 +113,21 @@ for d in mother_directory.folders:
     # Each folder have a size. Now add subfolders size to each upfolders size
     result[d.name] = goDeep(d, result)
 f.close()
+    
+print("########## Function 1 ##########")
+sum = 0
+for k in result:
+    if (result[k] <= 100000):
+        sum = sum + result[k]
 
-print("\n")
+print (f'Sum for folders <= 100000 is {sum}')
+
+print("########## Function 2 ##########")
 print(f'Total size is {total}')
 free = filesystem - total
 print (f'Free space is {free}')
 toBeRemoved = abs(free - update)
 print (f'To be removed is {toBeRemoved}')
-print("\n")
 
 # Parse everthing
 # Add free + size of folder
@@ -138,3 +143,4 @@ for key in result.keys():
 new = {k: v for k, v in sorted(select.items(), key=lambda item: item[1])}
 newList = list(new.keys())
 print(f'Delete size : {new[newList[0]]} which is the smaller folder size among the selected ones')
+

@@ -1,3 +1,6 @@
+import os
+path = os.path.dirname(os.path.abspath(__file__))
+file = path+"/../inputs/in04.txt"
 
 def checkInclude(s1,s2,func):
     e1 = s1.split("-")
@@ -44,7 +47,7 @@ def func(lines,part):
 
 
 
-f = open("decembre04.txt", "r")
+f = open(file, "r")
 lines = f.readlines()
 print('Call function 1')
 func(lines,1)

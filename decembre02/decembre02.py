@@ -1,3 +1,7 @@
+import os
+path = os.path.dirname(os.path.abspath(__file__))
+file = path+"/../inputs/in02.txt"
+
 ROCK = 1
 PAPER = 2
 SCISSORS = 3
@@ -92,7 +96,7 @@ def func2(lines):
 
     print(myPoints)
 
-f = open("decembre02.txt", "r")
+f = open(file, "r")
 lines = f.readlines()
 print('Call function 1')
 func1(lines)
