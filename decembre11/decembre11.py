@@ -1,5 +1,8 @@
 import math
 import re
+import sys
+
+sys.set_int_max_str_digits(9999999)
 
 debug=False
 if debug:
@@ -29,7 +32,7 @@ class monkey():
     def setOnFalse(self,onFalse):
         self.monkeyOnFalse = onFalse
         print(f'Monkey on false : {onFalse}')
-    def dealWithItems(self):
+    def dealWithItems(self, part):
         tuples = []
         while self.items!=[]:
             self.inspect += 1
@@ -38,7 +41,8 @@ class monkey():
             operation = operation.replace("old", str(i))
 
             i = eval(operation) # execute operation
-            i = math.floor(i/3)
+            if (part == 1):
+                i = math.floor(i/3)
             # Now, test divisble per x
             if ((i%self.test)!=0):
                 # False condition
@@ -47,6 +51,11 @@ class monkey():
                 # True condition
                 tuples.append((self.monkeyOnTrue,i))
         return tuples
+    def getAndClearInspect(self):
+        temp = self.inspect
+        self.inspect = 0
+        return temp
+        
 
 def getLine(f):
     line = f.readline()
@@ -98,27 +107,37 @@ while line:
 
 f.close()
 
-print(f'There are {len(monkeys)} monkeys')
+def func(part, max):
+    monkeyInspection = {}
+    for i in range(len(monkeys)):
+        monkeyInspection[i] = []
+    for i in range(max):
+        for m in monkeys:
+            tuples = m.dealWithItems(part)
+            for e in tuples:
+                (goto,item) = e
+                monkeys[goto].setItem(item)
 
-for i in range(20):
-    print(f'Iteration {i}')
-    for m in monkeys:
-        print(f'Monkey items = {m.items}, operation = {m.operation}, test = {m.test}, onTrue = {m.monkeyOnTrue}, onFalse = {m.monkeyOnFalse}')
-        tuples = m.dealWithItems()
-        print(f'Operations result : {tuples}')
-        for e in tuples:
-            (goto,item) = e
-            monkeys[goto].setItem(item)
+        if i in [0,19,999, 1999,2999,3999,4999,5999,6999,7999,8999,9999]:
+            for m in range(len(monkeys)):
+                print(f'Monkey {m} inspected items {monkeys[m].inspect}')
+                monkeyInspection[m].append(monkeys[m].getAndClearInspect())
 
-inspected = []
-for i in range(len(monkeys)):
-    m = monkeys[i]
-    print(f'Monkey {i} inspected items {m.inspect} times')
-    inspected.append(m.inspect)
+    inspected = []
+    for i in range(len(monkeys)):
+        sumInspect = sum(monkeyInspection[i],0)
+        print(f'Monkey {i} inspected items {sumInspect} times')
+        inspected.append(sumInspect)
 
-inspected.sort()
-business = inspected[-1]*inspected[-2]
-print(f'Business = {business}')
+    inspected.sort()
+    print(inspected)
+    business = inspected[-1]*inspected[-2]
+    print(f'Business = {business}')
 
 
+print("Call function 1")
+func(1,20)
+
+#print("Call function 2")
+#func(2,10000)
 
