@@ -3,13 +3,6 @@ import re
 import sys
 
 sys.set_int_max_str_digits(9999999)
-
-debug=False
-if debug:
-	f = open("inputs/in11Example.txt", "r")
-else:
-	 f = open("inputs/in11.txt", "r")
-
 class monkey():
     def __init__(self):
         self.items = []
@@ -22,16 +15,12 @@ class monkey():
         self.items.append(item)
     def setOperation(self,operation):
         self.operation = operation # old*5, old+78, old*old
-        print(f'Operation = {operation}')
     def setTest(self,test):
         self.test = test
-        print(f'Test : {test}')
     def setOnTrue(self,onTrue):
         self.monkeyOnTrue = onTrue
-        print(f'Monkey on true : {onTrue}')
     def setOnFalse(self,onFalse):
         self.monkeyOnFalse = onFalse
-        print(f'Monkey on false : {onFalse}')
     def dealWithItems(self, part):
         tuples = []
         while self.items!=[]:
@@ -55,70 +44,78 @@ class monkey():
         temp = self.inspect
         self.inspect = 0
         return temp
-        
 
 def getLine(f):
     line = f.readline()
     line = line.rstrip("\n")
-    print(line)
     return line
-
-monkeys = []
-
-line = getLine(f)
-while line:
-    if (line[:6] == "Monkey"):
-        m = monkey()
-        line = getLine(f) # Starting items
-        match = re.findall(r'starting items: ([\w\s,]+)', line, re.I)
-        if (match != []): # There is at least one item
-            items = match[0].split(",")
-            for i in items:
-                i = int(i)
-                m.setItem(i)
-
-        line = getLine(f) # Operation
-        match = re.findall(r'operation: new = ([\w\d\s\*\+\-\/]+)', line, re.I)
-        m.setOperation(match[0])
-
-        line = getLine(f) # Test
-        match = re.findall(r'test: divisible by (\d+)', line, re.I)
-        i = int(match[0])
-        m.setTest(i)
-
-        line = getLine(f) # True monkey
-        match = re.findall(r'if (\w+): throw to monkey (\d+)', line, re.I)
-        if (match[0][0] == "true"):
-            m.setOnTrue(int(match[0][1]))
-        elif (match[0][0] == "false"):
-            m.setOnFalse(int(match[0][1]))
-
-        line = getLine(f) # False monkey
-        match = re.findall(r'if (\w+): throw to monkey (\d+)', line, re.I)
-        if (match[0][0] == "true"):
-            m.setOnTrue(int(match[0][1]))
-        elif (match[0][0] == "false"):
-            m.setOnFalse(int(match[0][1]))
         
-        monkeys.append(m)
-
-    line = getLine(f) # Blank line
-    line = getLine(f) # New Monkey
-
-f.close()
-
 def func(part, max):
+    debug=True
+    if debug:
+        f = open("inputs/in11Example.txt", "r")
+    else:
+         f = open("inputs/in11.txt", "r")
+
+
+    monkeys = []
+
+    line = getLine(f)
+    while line:
+        if (line[:6] == "Monkey"):
+            m = monkey()
+            line = getLine(f) # Starting items
+            match = re.findall(r'starting items: ([\w\s,]+)', line, re.I)
+            if (match != []): # There is at least one item
+                items = match[0].split(",")
+                for i in items:
+                    i = int(i)
+                    m.setItem(i)
+
+            line = getLine(f) # Operation
+            match = re.findall(r'operation: new = ([\w\d\s\*\+\-\/]+)', line, re.I)
+            m.setOperation(match[0])
+
+            line = getLine(f) # Test
+            match = re.findall(r'test: divisible by (\d+)', line, re.I)
+            i = int(match[0])
+            m.setTest(i)
+
+            line = getLine(f) # True monkey
+            match = re.findall(r'if (\w+): throw to monkey (\d+)', line, re.I)
+            if (match[0][0] == "true"):
+                m.setOnTrue(int(match[0][1]))
+            elif (match[0][0] == "false"):
+                m.setOnFalse(int(match[0][1]))
+
+            line = getLine(f) # False monkey
+            match = re.findall(r'if (\w+): throw to monkey (\d+)', line, re.I)
+            if (match[0][0] == "true"):
+                m.setOnTrue(int(match[0][1]))
+            elif (match[0][0] == "false"):
+                m.setOnFalse(int(match[0][1]))
+            
+            monkeys.append(m)
+
+        line = getLine(f) # Blank line
+        line = getLine(f) # New Monkey
+
+    f.close()
+
     monkeyInspection = {}
     for i in range(len(monkeys)):
         monkeyInspection[i] = []
+
     for i in range(max):
         for m in monkeys:
             tuples = m.dealWithItems(part)
+            print(tuples)
             for e in tuples:
                 (goto,item) = e
                 monkeys[goto].setItem(item)
 
-        if i in [0,19,999, 1999,2999,3999,4999,5999,6999,7999,8999,9999]:
+        if i in [0,19,29,39,49,59,69,79,89,99,999, 1999,2999,3999,4999,5999,6999,7999,8999,9999]:
+            print(f'== After round {i+1} ==')
             for m in range(len(monkeys)):
                 print(f'Monkey {m} inspected items {monkeys[m].inspect}')
                 monkeyInspection[m].append(monkeys[m].getAndClearInspect())
@@ -130,7 +127,6 @@ def func(part, max):
         inspected.append(sumInspect)
 
     inspected.sort()
-    print(inspected)
     business = inspected[-1]*inspected[-2]
     print(f'Business = {business}')
 
@@ -138,6 +134,7 @@ def func(part, max):
 print("Call function 1")
 func(1,20)
 
-#print("Call function 2")
+print("Call function 2")
+# TODO 
 #func(2,10000)
 
