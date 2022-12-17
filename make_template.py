@@ -13,11 +13,11 @@ directory = "decembre"+number
 print(f'Create directory {directory}')
 os.mkdir(directory)
 
-example = directory+"/decembre"+number+"Example.txt"
+example = "inputs/in"+number+"Example.txt"
 print(f'Create file {example}')
 Path(example).touch()
 
-input = directory+"/decembre"+number+".txt"
+input = "inputs/in"+number+".txt"
 print(f'Create file {input}')
 Path(input).touch()
 
