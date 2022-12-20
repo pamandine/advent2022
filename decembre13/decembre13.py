@@ -4,7 +4,7 @@ import os
 
 couples = []
 
-debug=False
+debug=True
 if debug:
 	f = open("inputs/in13Example.txt", "r")
 else:
@@ -36,15 +36,6 @@ def compare(c1,c2):
     logging.info(f'Max between {c1} and {c2} is {m}')
     for i in range(m):
         try:
-        
-            try:
-                c1[i] = int(c1[i])
-            except:
-                pass
-            try:
-                c2[i] = int(c2[i])
-            except:
-                pass
 
             if isinstance(c1[i],list) and not isinstance(c2[i], list):
                 # c2 is not list, but c1 is list : convert
