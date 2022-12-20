@@ -1,5 +1,6 @@
 import ast
 import logging
+import os
 
 couples = []
 
@@ -8,8 +9,9 @@ if debug:
 	f = open("inputs/in13Example.txt", "r")
 else:
 	 f = open("inputs/in13.txt", "r")
+if os.path.isfile("log13.log"):
+    os.unlink("log13.log")
 logging.basicConfig(filename="log13.log", level=logging.DEBUG)
-
 
 tuples = []
 for line in f.readlines():
@@ -62,6 +64,8 @@ def compare(c1,c2):
 
             elif isinstance(c2[i],list) and isinstance(c1[i], list):
                 ret = compare (c1[i], c2[i])
+                if (ret[0] != SAME):
+                    break
         except:
             if (i >= len(c1)):
                 # Out of the list 
@@ -77,6 +81,7 @@ def compare(c1,c2):
 result = []
 pair = 1
 for c in couples:
+    logging.info("=== New couple ===")
     c1 = ast.literal_eval(c[0])
     c2 = ast.literal_eval(c[1])
     ret = compare(c1,c2)
