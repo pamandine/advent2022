@@ -64,6 +64,39 @@ for line in txt:
             for xx in range(min(x,x1),max(x,x1)+1):
                 map_[y][xx+offsetToZero] = "#"
 
+map_.append([])
+map_.append([])
+for xx in range(len(map_[0])):
+    map_[-2].append(".")
+    map_[-1].append("#")
+
+def increaseMap(_map, _index):
+
+    # Add double of elements at right and left
+    # I think this is the easiest way to deal with "infinite line" on the bottom
+    n = int(len(_map[0])*6)
+    temp = []
+    idx1 = []
+    idx2 = []
+    diez = []
+    for i in range(n):
+        temp.append(".")
+        diez.append("#")
+        idx1.append(xMin-i)
+        idx2.append(xMax+i)
+
+    idx1.reverse()
+    _index = idx1+_index+idx2
+
+    for yy in range(len(_map)):
+        if (yy == len(_map)-1):
+            _map[yy] = diez+_map[yy]+diez
+        else:
+            _map[yy] = temp+_map[yy]+temp
+    return (_map, _index)
+
+(map_, index) = increaseMap(map_,index)
+
 # Look for 0 on the top, and add "+"
 # Save the position
 start = []
@@ -91,15 +124,6 @@ def goDown(_map, curY, curX):
     else:
         return True
 
-def goOut(_map, curY, curX):
-    if ((curX-1) < 0):
-        return True
-    if ((curX+1) >= len(_map[0])):
-        return True
-    if ((curY+1)>=len(_map)):
-        return True
-    return False
-
 def goDownLeft(_map,curY,curX):
     if (_map[curY+1][curX-1] == "."):
         return True
@@ -117,9 +141,7 @@ y = start[0]
 units = 0
 # Go on, find the sand positions 
 while goOn:
-    if goOut(map_,y,x):
-        goOn = False
-    elif goDown(map_,y,x):
+    if goDown(map_,y,x):
         x = x
         y = y + 1
     elif goDownLeft(map_,y,x):
@@ -130,14 +152,16 @@ while goOn:
         y = y + 1
     else : # stay where you are, little sand
         map_[y][x] = "o"
+        units += 1
+        if (x == start[1] and y == start[0]): # Not moving anymore, this is the end
+            goOn = False
         x = start[1]
         y = start[0]
-        units += 1
 
-# Print all of it because it's cool 
-for k in range(len(map_)):
-    mapTxt = "".join(map_[k])
-    print(f'{k} {mapTxt}')
+        # Print all of it because it's cool 
+        for k in range(len(map_)):
+            mapTxt = "".join(map_[k])
+            print('{:02d} {:s}'.format(k,mapTxt))
 
 print (f"There are {units} of sand")
 
