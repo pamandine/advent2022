@@ -1,4 +1,4 @@
-debug=True
+debug=False
 if debug:
 	f = open("inputs/in14Example.txt", "r")
 else:
@@ -6,7 +6,10 @@ else:
 txt = f.readlines()
 f.close()
 
+##########################
+# Build the stupid map
 # 500,0 is the + (sand)
+##########################
 xMax = 0
 yMax = 0
 xMin = 99999
@@ -54,7 +57,6 @@ for line in txt:
         (x1,y1) = n[i+1].split(",")
         x1 = int(x1)-500
         y1 = int(y1)
-        print(f'x={x}, y={y}, x1={x1}, y1={y1}')
 
         if (x==x1):
             for yy in range(0,yMax+1):
@@ -62,22 +64,31 @@ for line in txt:
                     map_[yy][x+offsetToZero] = "#"
         else: # y==y1
             for xx in range(min(x,x1),max(x,x1)+1):
-                print(xx)
                 map_[y][xx+offsetToZero] = "#"
-
-# Look for 0 on the top, and add "+"
-start = []
-for i in range(len(map_)):
-    if (index[i] == 0):
-        map_[0][i] = "+"
-        start = [0,i]
-# The map is finally built.....
-
 
 print(index)
 for k in range(len(map_)):
     mapTxt = "".join(map_[k])
     print(f'{k} {mapTxt}')
+
+# Look for 0 on the top, and add "+"
+start = []
+for i in range(len(map_[0])):
+    if (index[i] == 0):
+        map_[0][i] = "+"
+        start = [0,i]
+
+print(index)
+for k in range(len(map_)):
+    mapTxt = "".join(map_[k])
+    print(f'{k} {mapTxt}')
+
+print("")
+
+##########################
+# The map is finally built.....
+# Now, let the sand fall !
+##########################
 
 def goDown(_map, curY, curX):
     if (_map[curY+1][curX] != "."):
@@ -88,9 +99,9 @@ def goDown(_map, curY, curX):
 def goOut(_map, curY, curX):
     if ((curX-1) < 0):
         return True
-    if ((curX+1) > len(_map[0])):
+    if ((curX+1) >= len(_map[0])):
         return True
-    if ((curY+1)>len(_map)):
+    if ((curY+1)>=len(_map)):
         return True
     return False
 
@@ -108,6 +119,7 @@ def goDownRight(_map,curY,curX):
 goOn = True
 x = start[1]
 y = start[0]
+units = 0
 while goOn:
     if goOut(map_,y,x):
         goOn = False
@@ -124,12 +136,11 @@ while goOn:
         map_[y][x] = "o"
         x = start[1]
         y = start[0]
+        units += 1
 
-
-
-print(index)
 for k in range(len(map_)):
     mapTxt = "".join(map_[k])
     print(f'{k} {mapTxt}')
 
+print (f"There are {units} of sand")
 
