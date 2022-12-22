@@ -65,8 +65,71 @@ for line in txt:
                 print(xx)
                 map_[y][xx+offsetToZero] = "#"
 
+# Look for 0 on the top, and add "+"
+start = []
+for i in range(len(map_)):
+    if (index[i] == 0):
+        map_[0][i] = "+"
+        start = [0,i]
+# The map is finally built.....
+
 
 print(index)
 for k in range(len(map_)):
-    print(f'{k} {map_[k]}')
+    mapTxt = "".join(map_[k])
+    print(f'{k} {mapTxt}')
+
+def goDown(_map, curY, curX):
+    if (_map[curY+1][curX] != "."):
+        return False
+    else:
+        return True
+
+def goOut(_map, curY, curX):
+    if ((curX-1) < 0):
+        return True
+    if ((curX+1) > len(_map[0])):
+        return True
+    if ((curY+1)>len(_map)):
+        return True
+    return False
+
+def goDownLeft(_map,curY,curX):
+    if (_map[curY+1][curX-1] == "."):
+        return True
+    return False
+
+def goDownRight(_map,curY,curX):
+    if (_map[curY+1][curX+1] == "."):
+        return True
+    return False
+
+
+goOn = True
+x = start[1]
+y = start[0]
+while goOn:
+    if goOut(map_,y,x):
+        goOn = False
+    elif goDown(map_,y,x):
+        x = x
+        y = y + 1
+    elif goDownLeft(map_,y,x):
+        x = x - 1
+        y = y + 1
+    elif goDownRight(map_,y,x):
+        x = x + 1
+        y = y + 1
+    else : # stay where you are, little sand
+        map_[y][x] = "o"
+        x = start[1]
+        y = start[0]
+
+
+
+print(index)
+for k in range(len(map_)):
+    mapTxt = "".join(map_[k])
+    print(f'{k} {mapTxt}')
+
 
